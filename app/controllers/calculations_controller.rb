@@ -10,14 +10,19 @@ class CalculationsController < ApplicationController
     # The special word the user input is in the string @special_word.
     # ================================================================================
 
+text_split_into_array = @text.downcase.split
 
-    @word_count = "Replace this string with your answer."
+    @word_count = text_split_into_array.count
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.size
 
-    @character_count_without_spaces = "Replace this string with your answer."
+text_without_spaces = @text.gsub(/[ ]/,'')
 
-    @occurrences = "Replace this string with your answer."
+    @character_count_without_spaces = text_without_spaces.size
+
+#.gsub(/[^a-z0-9\s]/i, "") -- come back to this later
+
+    @occurrences = text_split_into_array.count(@special_word)
 
     # ================================================================================
     # Your code goes above.
@@ -31,6 +36,14 @@ class CalculationsController < ApplicationController
     @years = params[:number_of_years].to_i
     @principal = params[:principal_value].to_f
 
+#P = @principal*[(@apr/12)(1 + @apr/12)^@years)]/[(1 + @apr/12)^@years - 1]
+#P = B[ (r/12) (1 + r/12)^m) ]/[(1 + r/12)^m - 1]
+#Rate times principal,
+term1 = (@apr/100)/12
+term2 = (1+ (@apr/100)/12)**(@years*12)
+term3 = ((1+ (@apr/100)/12)**(@years*12)) - 1
+
+
     # ================================================================================
     # Your code goes below.
     # The annual percentage rate the user input is in the decimal @apr.
@@ -38,7 +51,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = @principal*(term1*term2)/term3
 
     # ================================================================================
     # Your code goes above.
@@ -60,12 +73,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @days/365
 
     # ================================================================================
     # Your code goes above.
@@ -82,21 +95,35 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
 
-    @count = "Replace this string with your answer."
 
-    @minimum = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @maximum = "Replace this string with your answer."
+    @count = @sorted_numbers.count
 
-    @range = "Replace this string with your answer."
+    @minimum = @sorted_numbers.min
 
-    @median = "Replace this string with your answer."
+    @maximum = @sorted_numbers.max
 
-    @sum = "Replace this string with your answer."
+    @range = @sorted_numbers[@count-1] - @sorted_numbers[0]
 
-    @mean = "Replace this string with your answer."
+if
+    @count % 2 == 1
+@median = @sorted_numbers[((@count-1)/2)]
+
+else
+  @count % 2 == 0
+  term_a= @sorted_numbers[(@count/2)-1]
+  term_b= @sorted_numbers[((@count)/2)]
+
+@median = (term_b + term_a)/2
+    end
+    #if even, add two middle terms and divide by two
+    #if odd, return middle term-- (@count/2)+1
+
+    @sum = @sorted_numbers.sum
+
+    @mean = @sum/(@count)
 
     @variance = "Replace this string with your answer."
 
